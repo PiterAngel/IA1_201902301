@@ -1,7 +1,7 @@
 function reflex_agent(location, state) {
     if (state == "DIRTY") return "CLEAN";
-    else if (location == "A") return "RIGHT";
-    else if (location == "B") return "LEFT";
+    else if (location == "A") return Math.random() < 0.5 ? "RIGHT" : "LEFT"; // Aleatoriedad en la decisión
+    else if (location == "B") return Math.random() < 0.5 ? "LEFT" : "RIGHT"; // Aleatoriedad en la decisión
 }
 
 function test(states, visitedStates) {
@@ -24,23 +24,29 @@ function test(states, visitedStates) {
     } else if (action_result == "RIGHT") states[0] = "B";
     else if (action_result == "LEFT") states[0] = "A";
 
+    // Ensuciar habitaciones con probabilidad
     if (Math.random() < 0.3) {
         states[1] = "DIRTY";
-        document.getElementById("log").value += `Una habitación ah estado sucia!! A!\n`;
+        document.getElementById("log").value += `¡La habitación A se ensució!\n`;
     }
     if (Math.random() < 0.3) { 
         states[2] = "DIRTY";
-        document.getElementById("log").value += `Una habitación ah estado sucia!! B!\n`;
+        document.getElementById("log").value += `¡La habitación B se ensució!\n`;
     }
 
     if (visitedStates.size === 8) {
-        document.getElementById("log").value += `Cada estado posible ha sido visitado!\n`;
+        document.getElementById("log").value += `¡Cada estado posible ha sido visitado!\n`;
         return; 
     }
 
     setTimeout(function() { test(states, visitedStates); }, 2000);
 }
 
-var states = ["A", "DIRTY", "DIRTY"];
+// Estado inicial aleatorio
+var states = [
+    "A", 
+    Math.random() < 0.5 ? "DIRTY" : "CLEAN", 
+    Math.random() < 0.5 ? "DIRTY" : "CLEAN"
+];
 var visitedStates = new Set();
 test(states, visitedStates);
